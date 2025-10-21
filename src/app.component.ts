@@ -165,7 +165,7 @@ export class AppComponent {
     ],
   });
 
-  getTransform(index: number, total: number): string {
+  getTransform(index, total) {
     const angle = (360 / total) * index;
     const radius = 'clamp(18rem, 30vw, 28rem)'; // Responsive radius
     return `rotate(${angle}deg) translate(${radius}) rotate(-${angle}deg)`;
