@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
     { id: 7, title: 'Jam Session e Início das Turmas', department: 'Operacional', color: '#bf917f', description: ['Ação de mobilização e encantamento para famílias e alunos.', 'Formação das turmas e início das experiências.', 'Gesto simbólico de abertura do ciclo letivo LABirintar.'] },
   ];
 
-  // Reorder steps for visual layout to start at a different position and flow clockwise.
   const stepsForDisplay = [
     steps.find(s => s.id === 3),
     steps.find(s => s.id === 4),
@@ -18,8 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     steps.find(s => s.id === 7),
     steps.find(s => s.id === 1),
     steps.find(s => s.id === 2),
-  ].filter(Boolean); // Use filter to ensure no undefined items if an id is not found.
-
+  ].filter(Boolean);
 
   const feedbackLoop = {
     title: 'Retroalimentação',
@@ -32,43 +30,65 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const flowchartContainer = document.getElementById('flowchart-container');
   const feedbackContainer = document.getElementById('feedback-loop-container');
+  const centerCircle = document.getElementById('center-circle');
+  const originalCenterHTML = centerCircle.innerHTML;
 
   function getTransform(index, total) {
     const angle = (360 / total) * index;
-    const radius = 'clamp(18rem, 30vw, 28rem)';
+    const radius = 'clamp(8rem, 25vw, 18rem)';
     return `rotate(${angle}deg) translate(${radius}) rotate(-${angle}deg)`;
+  }
+
+  function renderStaticFeedbackCard() {
+    const feedbackDescriptionHtml = feedbackLoop.description
+      .map(desc => `<li class="text-stone-600 text-sm md:text-base mb-1 ml-4">${desc}</li>`)
+      .join('');
+
+    feedbackContainer.innerHTML = `
+      <div class="mt-4 md:mt-0 max-w-2xl w-full bg-white rounded-2xl shadow-xl p-6 border-4 border-stone-200">
+        <h3 class="text-2xl font-bold text-stone-700 mb-2">${feedbackLoop.title}</h3>
+        <ul class="list-disc list-inside">${feedbackDescriptionHtml}</ul>
+      </div>
+    `;
   }
 
   stepsForDisplay.forEach((step, index) => {
     const stepEl = document.createElement('div');
-    stepEl.className = 'absolute w-60 h-60 p-5 flex flex-col items-center justify-center rounded-full shadow-lg transition-transform duration-500 hover:scale-110 hover:shadow-2xl hover:z-20';
+    stepEl.className = 'absolute w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 lg:w-48 lg:h-48 p-2 text-center flex flex-col items-center justify-center rounded-full shadow-lg transition-transform duration-300 cursor-pointer';
     stepEl.style.backgroundColor = step.color;
     stepEl.style.transform = getTransform(index, stepsForDisplay.length);
-
-    const descriptionHtml = step.description
-      .map(desc => `<p class="text-white text-xs leading-tight mb-1">• ${desc}</p>`)
-      .join('');
+    stepEl.dataset.stepId = step.id;
 
     stepEl.innerHTML = `
       <div class="text-center">
-        <h4 class="font-bold text-lg text-stone-800">${step.title}</h4>
-        <p class="text-sm font-semibold text-stone-600">${step.department}</p>
-        <div class="absolute inset-0 bg-black bg-opacity-50 rounded-full flex flex-col justify-center p-4 opacity-0 hover:opacity-100 transition-opacity duration-300">
-          ${descriptionHtml}
-        </div>
+        <h4 class="font-bold text-sm sm:text-base md:text-lg text-stone-800">${step.title}</h4>
+        <p class="text-xs sm:text-sm font-semibold text-stone-600">${step.department}</p>
       </div>
     `;
+
+    stepEl.addEventListener('mouseenter', () => {
+      const descriptionHtml = step.description
+        .map(d => `<li class="text-[10px] sm:text-xs leading-tight text-stone-700 list-disc ml-4 text-left">${d}</li>`)
+        .join('');
+      
+      centerCircle.style.transform = 'scale(1.3)';
+      centerCircle.style.backgroundColor = step.color;
+      centerCircle.innerHTML = `
+        <div class="p-2 sm:p-4 flex items-center justify-center h-full w-full">
+          <ul class="space-y-1">${descriptionHtml}</ul>
+        </div>
+      `;
+    });
+
+    stepEl.addEventListener('mouseleave', () => {
+      centerCircle.style.transform = 'scale(1)';
+      centerCircle.style.backgroundColor = 'white';
+      centerCircle.innerHTML = originalCenterHTML;
+    });
+    
     flowchartContainer.appendChild(stepEl);
   });
   
-  const feedbackDescriptionHtml = feedbackLoop.description
-      .map(desc => `<p class="text-stone-600 text-sm md:text-base mb-1">• ${desc}</p>`)
-      .join('');
-      
-  feedbackContainer.innerHTML = `
-    <div class="mt-8 md:mt-0 max-w-2xl w-full bg-white rounded-2xl shadow-xl p-6 border-4 border-stone-200">
-      <h3 class="text-2xl font-bold text-stone-700 mb-2">${feedbackLoop.title}</h3>
-      ${feedbackDescriptionHtml}
-    </div>
-  `;
+  // Render the static feedback card
+  renderStaticFeedbackCard();
 });
