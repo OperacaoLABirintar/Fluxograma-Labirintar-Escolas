@@ -68,10 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     stepEl.addEventListener('mouseenter', () => {
       const descriptionHtml = step.description
-        .map(d => `<li class="text-[10px] sm:text-xs leading-tight text-stone-700 list-disc ml-4 text-left">${d}</li>`)
+        .map(d => `<li class="text-[8px] sm:text-[9px] md:text-[9px] leading-tight text-stone-700 list-disc ml-4 text-left">${d}</li>`)
         .join('');
       
-      centerCircle.style.transform = 'scale(1.3)';
+      centerCircle.style.transform = 'scale(1.5)';
       centerCircle.style.backgroundColor = step.color;
       centerCircle.innerHTML = `
         <div class="p-2 sm:p-4 flex items-center justify-center h-full w-full">
