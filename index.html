@@ -13,31 +13,39 @@
   >
     <header class="text-center mb-2 md:mb-4">
       <h1
-        class="text-3xl md:text-5xl font-bold text-stone-700 tracking-tight"
+        class="text-2xl md:text-4xl font-bold text-stone-700 tracking-tight"
       >
         Fluxo de Parceria e Produção
       </h1>
-      <h2 class="text-xl md:text-2xl text-stone-500">
+      <h2 class="text-lg md:text-xl text-stone-500">
         LABirintar com Escolas
       </h2>
-      <p class="text-md text-stone-500 mt-2">
+      <p class="text-sm text-stone-500 mt-2">
         (Ciclo de Retroalimentação – da escuta à operação)
       </p>
     </header>
 
     <div
       id="flowchart-container"
-      class="relative w-full max-w-sm sm:max-w-md md:max-w-xl lg:max-w-3xl aspect-[1/1] flex items-center justify-center my-8 md:my-12"
+      class="relative w-full max-w-sm sm:max-w-md md:max-w-xl lg:max-w-3xl aspect-[1/1] flex items-center justify-center my-16 md:my-24"
     >
+      <!-- Arrow arc -->
+      <svg class="absolute w-[85%] h-[85%] top-[7.5%] left-[7.5%] z-0 text-stone-300" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+          <defs>
+              <marker id="arrowhead" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,4 L6,2 z" fill="currentColor" />
+              </marker>
+          </defs>
+          <path d="M 7.5,38.6 A 44,44 0 1 1 16.3,78.3" fill="none" stroke="currentColor" stroke-width="0.8" stroke-dasharray="2,2" marker-end="url(#arrowhead)"/>
+      </svg>
+
       <!-- Center Circle -->
       <div
         id="center-circle"
-        class="absolute z-10 flex flex-col items-center justify-center w-36 h-36 sm:w-48 sm:h-48 md:w-56 md:h-56 bg-white rounded-full shadow-2xl p-2 sm:p-4 text-center transition-all duration-300"
+        class="absolute z-10 flex flex-col items-center justify-center w-40 h-40 sm:w-48 sm:h-48 md:w-60 md:h-60 bg-white rounded-full shadow-2xl p-2 sm:p-4 text-center transition-all duration-300"
       >
-        <h3 class="text-base sm:text-lg md:text-xl font-bold text-stone-800">Parceria Viva</h3>
-        <span class="text-xl sm:text-2xl md:text-3xl font-light text-stone-500">LABirintar</span>
-        <span class="text-lg sm:text-xl md:text-2xl font-light text-stone-500">↔</span>
-        <span class="text-xl sm:text-2xl md:text-3xl font-light text-stone-500">Escola</span>
+        <h3 class="text-lg sm:text-xl md:text-2xl font-bold text-stone-800 leading-tight">LABirintar</h3>
+        <p class="text-sm sm:text-base md:text-lg text-stone-600 px-2">Fluxo de Parceria com Escolas</p>
       </div>
       <!-- Step circles will be injected here by JS -->
     </div>

@@ -10,13 +10,13 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   const stepsForDisplay = [
-    steps.find(s => s.id === 3),
     steps.find(s => s.id === 4),
     steps.find(s => s.id === 5),
     steps.find(s => s.id === 6),
     steps.find(s => s.id === 7),
     steps.find(s => s.id === 1),
     steps.find(s => s.id === 2),
+    steps.find(s => s.id === 3),
   ].filter(Boolean);
 
   const feedbackLoop = {
@@ -33,9 +33,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const centerCircle = document.getElementById('center-circle');
   const originalCenterHTML = centerCircle.innerHTML;
 
+  const blobShapes = [
+    '67% 33% 58% 42% / 49% 62% 38% 51%',
+    '34% 66% 36% 64% / 55% 38% 62% 45%',
+    '51% 49% 48% 52% / 63% 50% 50% 37%',
+    '33% 67% 68% 32% / 55% 27% 73% 45%',
+    '50% 50% 34% 66% / 56% 56% 44% 44%',
+    '32% 68% 39% 61% / 58% 61% 39% 42%',
+    '61% 39% 63% 37% / 45% 58% 42% 55%',
+  ];
+
   function getTransform(index, total) {
     const angle = (360 / total) * index;
-    const radius = 'clamp(8rem, 25vw, 18rem)';
+    const baseRadiusVw = 28;
+    const radiusVariation = (Math.random() - 0.5) * 6; // +/- 3vw
+    const radius = `clamp(9rem, ${baseRadiusVw + radiusVariation}vw, 22rem)`;
     return `rotate(${angle}deg) translate(${radius}) rotate(-${angle}deg)`;
   }
 
@@ -54,9 +66,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   stepsForDisplay.forEach((step, index) => {
     const stepEl = document.createElement('div');
-    stepEl.className = 'absolute w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 lg:w-48 lg:h-48 p-2 text-center flex flex-col items-center justify-center rounded-full shadow-lg transition-transform duration-300 cursor-pointer';
+    stepEl.className = 'absolute w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 lg:w-48 lg:h-48 p-2 text-center flex flex-col items-center justify-center shadow-lg transition-transform transition-opacity duration-300 cursor-pointer';
     stepEl.style.backgroundColor = step.color;
-    stepEl.style.transform = getTransform(index, stepsForDisplay.length);
+    const originalTransform = getTransform(index, stepsForDisplay.length);
+    stepEl.style.transform = originalTransform;
+    stepEl.style.borderRadius = blobShapes[index % blobShapes.length];
+    stepEl.style.zIndex = '1';
     stepEl.dataset.stepId = step.id;
 
     stepEl.innerHTML = `
@@ -67,11 +82,14 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
 
     stepEl.addEventListener('mouseenter', () => {
+      stepEl.style.opacity = '0.6';
+      stepEl.style.transform = `${originalTransform} scale(0.95)`;
+
       const descriptionHtml = step.description
-        .map(d => `<li class="text-[8px] sm:text-[9px] md:text-[9px] leading-tight text-stone-700 list-disc ml-4 text-left">${d}</li>`)
+        .map(d => `<li class="text-[10px] sm:text-[11px] md:text-[12px] leading-tight text-stone-700 list-disc ml-4 text-left">${d}</li>`)
         .join('');
       
-      centerCircle.style.transform = 'scale(1.5)';
+      centerCircle.style.transform = 'scale(1.4)';
       centerCircle.style.backgroundColor = step.color;
       centerCircle.innerHTML = `
         <div class="p-2 sm:p-4 flex items-center justify-center h-full w-full">
@@ -81,6 +99,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     stepEl.addEventListener('mouseleave', () => {
+      stepEl.style.opacity = '1';
+      stepEl.style.transform = originalTransform;
+
       centerCircle.style.transform = 'scale(1)';
       centerCircle.style.backgroundColor = 'white';
       centerCircle.innerHTML = originalCenterHTML;
